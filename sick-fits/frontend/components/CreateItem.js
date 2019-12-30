@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import Router from 'next/router';
 import Form from './styles/Form';
 import Error from './ErrorMessage';
 import formatMoney from '../lib/formatMoney';
-import { collectFields } from 'graphql/execution/execute';
 
 const CREATE_ITEM_MUTATION = gql`
   mutation CREATE_ITEM_MUTATION(
@@ -45,9 +43,9 @@ class CreateItem extends Component {
   };
 
   uploadFile = async e => {
-    console.log('uploading file');
+    console.log('uploading file...');
     const files = e.target.files;
-    const data = new FormDate();
+    const data = new FormData();
     data.append('file', files[0]);
     data.append('upload_preset', 'sawwaves');
 
@@ -69,7 +67,7 @@ class CreateItem extends Component {
       <Mutation
         mutation={ CREATE_ITEM_MUTATION }
         variables={this.state}>
-          {(createItem, { loading, error, called, data}) => (
+          {(createItem, { loading, error }) => (
             <Form onSubmit={async e => {
               //stop form from submitting
               e.preventDefault();
@@ -93,10 +91,10 @@ class CreateItem extends Component {
                     name="file"
                     placeholder="Upload an image"
                     required
-                    value={this.state.image}
                   />
                   {this.state.image && <img width="200" src={this.state.image} alt='Upload Preview'/>}
                 </label>
+
                 <label htmlFor="title">
                   Title
                   <input
@@ -141,10 +139,6 @@ class CreateItem extends Component {
     );
   }
 }
-
-CreateItem.propTypes = {
-
-};
 
 export default CreateItem;
 export { CREATE_ITEM_MUTATION };
